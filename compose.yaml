@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ponger:
+    build: ./ponger
+    environment:
+      - PORT=8001
+
+  pinger:
+    build: ./pinger
+    depends_on:
+      - ponger
