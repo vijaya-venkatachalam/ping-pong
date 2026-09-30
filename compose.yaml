@@ -4,7 +4,14 @@ services:
     environment:
       - PORT=8001
 
+  proxy:
+    build: ./proxy
+    environment:
+      - PORT=8080
+    depends_on:
+      - ponger
+
   pinger:
     build: ./pinger
     depends_on:
-      - ponger
+      - proxy

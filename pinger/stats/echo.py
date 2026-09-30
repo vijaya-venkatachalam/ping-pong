@@ -26,8 +26,10 @@ class EchoClient:
     def send_ping(self):
         epoch_time = int(time.time())
         time_str = str(epoch_time)
+        print(f"Tx to proxy {self.host}:{self.port}")
         self.client.sendto(time_str.encode(), (self.host, self.port))
         data, addr = self.client.recvfrom(4096)
+        print(f"Rx from proxy {addr}")
         time_str = data.decode()
         rtt = int(time.time()) - int(time_str)
         # Pop entries from the front when new data is received, LIFO
@@ -40,9 +42,9 @@ class EchoClient:
 
     def start(self):
         """ Start gathering RTT metrics """
-        self.timer = Timer(5, self.send_ping)
+        self.timer = Timer(1, self.send_ping)
         self.timer.start()
 
 if __name__ == "__main__":
-    cl = EchoClient("localhost", 8001)
+    cl = EchoClient("proxy", 8080)
     cl.start()
